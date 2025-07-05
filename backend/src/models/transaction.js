@@ -18,7 +18,7 @@ const transactionSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['salary','business','investments','other','food','rent','transport','entertainment','utilities','healthcare','education','other'],
+        enum: ['salary','business','investments','food','rent','transport','entertainment','utilities','healthcare','education','other'],
         default: 'other'
     },
     date : {
@@ -29,7 +29,7 @@ const transactionSchema = new mongoose.Schema({
     description : String,
     paymentMethod : {
         type: String,
-        enum: ['cash','creditcard','debitcard','banktransfer','other'],
+        enum: ['cash','creditcard','debitcard','banktransfer','upi','other'],
         default: 'other'
     }
 });
