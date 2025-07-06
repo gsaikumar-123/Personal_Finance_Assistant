@@ -31,7 +31,7 @@ const AddTransaction = () => {
         
         <TransactionForm
           onSubmit={handleSubmit}
-          onCancel={() => navigate('/dashboard')}
+          onCancel={() => navigate('/filter-transactions')}
           submitLabel="Add Transaction"
           loading={loading}
         />
