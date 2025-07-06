@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { transactionAPI } from '../utils/api';
 import { formatCurrency } from '../utils/format';
-import TransactionForm from '../components/transactions/TransactionForm';
-import TransactionList from '../components/transactions/TransactionList';
-import TransactionFilter from '../components/transactions/TransactionFilter';
 import CategoryChart from '../components/charts/CategoryChart';
 import DateChart from '../components/charts/DateChart';
 import Button from '../components/common/Button';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingTransaction, setEditingTransaction] = useState(null);
 
   useEffect(() => {
     fetchTransactions();
@@ -28,59 +24,15 @@ const Dashboard = () => {
       const data = response.data?.data || response.data || [];
       const safeData = Array.isArray(data) ? data : [];
       setTransactions(safeData);
-      setFilteredTransactions(safeData);
     } catch (error) {
       setTransactions([]);
-      setFilteredTransactions([]);
       console.error('Failed to fetch transactions:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleTransactionSuccess = () => {
-    setShowForm(false);
-    setEditingTransaction(null);
-    fetchTransactions();
-  };
-
-  const handleEditTransaction = (transaction) => {
-    setEditingTransaction(transaction);
-    setShowForm(true);
-  };
-
-  const handleFilter = async (filters) => {
-    try {
-      setLoading(true);
-      let response;
-
-      if (filters.type) {
-        response = await transactionAPI.getByType(filters.type);
-      } else if (filters.category) {
-        response = await transactionAPI.filterByCategory(filters.category);
-      } else if (filters.fromDate && filters.toDate) {
-        response = await transactionAPI.filterByDate(filters.fromDate, filters.toDate);
-      } else {
-        response = await transactionAPI.getAll();
-      }
-
-      const data = response.data?.data || response.data || [];
-      const safeData = Array.isArray(data) ? data : [];
-      setFilteredTransactions(safeData);
-    } catch (error) {
-      setFilteredTransactions([]);
-      console.error('Failed to filter transactions:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleClearFilters = () => {
-    setFilteredTransactions(Array.isArray(transactions) ? transactions : []);
-  };
-
   const safeTransactions = Array.isArray(transactions) ? transactions : [];
-  const safeFilteredTransactions = Array.isArray(filteredTransactions) ? filteredTransactions : [];
 
   const totalIncome = safeTransactions
     .filter(t => t.type === 'income')
@@ -96,12 +48,21 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Dashboard
-          </h1>
-          <p className="text-gray-600">
-            Welcome back, {user?.firstName}! Here's your financial overview.
-          </p>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Welcome back, {user?.firstName}! Here's your financial overview.
+              </p>
+            </div>
+            <Button
+              onClick={() => navigate('/add-transaction')}
+            >
+              Add Transaction
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -150,47 +111,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <CategoryChart transactions={safeTransactions} />
           <DateChart transactions={safeTransactions} />
         </div>
-
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
-            <Button
-              onClick={() => setShowForm(true)}
-              disabled={showForm}
-            >
-              Add Transaction
-            </Button>
-          </div>
-
-          {showForm && (
-            <div className="mb-6">
-              <TransactionForm
-                transaction={editingTransaction}
-                onSuccess={handleTransactionSuccess}
-                onCancel={() => {
-                  setShowForm(false);
-                  setEditingTransaction(null);
-                }}
-              />
-            </div>
-          )}
-
-          <TransactionFilter
-            onFilter={handleFilter}
-            onClear={handleClearFilters}
-          />
-        </div>
-
-        <TransactionList
-          transactions={safeFilteredTransactions}
-          onUpdate={handleEditTransaction}
-          onDelete={fetchTransactions}
-          loading={loading}
-        />
       </div>
     </div>
   );

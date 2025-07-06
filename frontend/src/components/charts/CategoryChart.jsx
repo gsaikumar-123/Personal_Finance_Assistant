@@ -1,11 +1,95 @@
-import React from 'react'
+import { useEffect, useRef } from 'react';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
 
-const CategoryChart = () => {
+Chart.register(ArcElement, Tooltip, Legend);
+
+const CategoryChart = ({ transactions }) => {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    // Clean up previous chart instance
+    if (chartRef.current) {
+      chartRef.current.destroy();
+    }
+  }, [transactions]);
+
+  const expenseTransactions = transactions?.filter(t => t.type === 'expense') || [];
+  
+  if (expenseTransactions.length === 0) {
+    return (
+      <div className="card">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
+        <div className="text-center py-8 text-gray-500">
+          No expense data available
+        </div>
+      </div>
+    );
+  }
+
+  const categoryTotals = expenseTransactions.reduce((acc, transaction) => {
+    acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount;
+    return acc;
+  }, {});
+
+  const categories = Object.keys(categoryTotals);
+  const amounts = Object.values(categoryTotals);
+
+  const colors = [
+    '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6',
+    '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1'
+  ];
+
+  const data = {
+    labels: categories.map(cat => cat.charAt(0).toUpperCase() + cat.slice(1)),
+    datasets: [
+      {
+        data: amounts,
+        backgroundColor: colors.slice(0, categories.length),
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+          font: {
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((context.parsed / total) * 100).toFixed(1);
+            return `${context.label}: ₹${context.parsed.toFixed(2)} (${percentage}%)`;
+          },
+        },
+      },
+    },
+    animation: {
+      duration: 750,
+      easing: 'easeInOutQuart'
+    }
+  };
+
   return (
-    <div>
-      This is the Category Chart component.
+    <div className="card">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
+      <div className="h-64">
+        <Doughnut data={data} options={options} />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default CategoryChart
+export default CategoryChart;

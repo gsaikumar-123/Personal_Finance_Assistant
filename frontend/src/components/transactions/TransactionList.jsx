@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { transactionAPI } from '../../utils/api';
 import { formatCurrency, formatDate, getCategoryColor, getPaymentMethodColor } from '../../utils/format';
 import Button from '../common/Button';
 
-const TransactionList = ({ transactions, onUpdate, onDelete, loading }) => {
+const TransactionList = ({ transactions, onDelete, loading }) => {
+  const navigate = useNavigate();
   const [deletingId, setDeletingId] = useState(null);
 
   const handleDelete = async (id) => {
@@ -108,7 +110,7 @@ const TransactionList = ({ transactions, onUpdate, onDelete, loading }) => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onUpdate?.(transaction)}
+                      onClick={() => navigate(`/edit-transaction/${transaction._id}`)}
                     >
                       Edit
                     </Button>

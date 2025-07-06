@@ -7,6 +7,9 @@ import Login from './pages/Login'
 import Signup from './pages/SignUp'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
+import AddTransaction from './pages/AddTransaction'
+import EditTransaction from './pages/EditTransaction'
+import FilterTransactions from './pages/FilterTransactions'
 
 function App() {
   return (
@@ -31,6 +34,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-transaction"
+              element={
+                <ProtectedRoute>
+                  <AddTransaction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-transaction/:id"
+              element={
+                <ProtectedRoute>
+                  <EditTransaction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/filter-transactions"
+              element={
+                <ProtectedRoute>
+                  <FilterTransactions />
                 </ProtectedRoute>
               }
             />
