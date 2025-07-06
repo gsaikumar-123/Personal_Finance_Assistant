@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { transactionAPI } from '../utils/api';
 import Button from '../components/common/Button';
 import TransactionForm from '../components/common/TransactionForm';
+import { useNotification } from '../context/NotificationContext';
 
 const ReceiptExtractor = () => {
   const navigate = useNavigate();
+  const { showError, showSuccess, showInfo, showWarning } = useNotification();
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -19,7 +21,7 @@ const ReceiptExtractor = () => {
 
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
     if (!validTypes.includes(selectedFile.type)) {
-      alert('Please select a valid image (JPEG, PNG) or PDF file');
+      showError('Please select a valid image (JPEG, PNG) or PDF file');
       return;
     }
 
@@ -53,20 +55,20 @@ const ReceiptExtractor = () => {
       
       if (response.status === 503 && data.demo) {
         setExtractedData(data.demo);
-        alert('Demo mode: Using sample data. Add your Gemini API key to enable real receipt extraction.');
+        showWarning('Demo mode: Using sample data. Add your Gemini API key to enable real receipt extraction.');
       } else if (!response.ok) {
         throw new Error('Failed to extract receipt');
       } else {
         setExtractedData(data);
         if (data.transactionId) {
-          alert(`✅ Receipt extracted and transaction saved successfully!\nTransaction ID: ${data.transactionId}`);
+          showSuccess(`Receipt extracted and transaction saved successfully! Transaction ID: ${data.transactionId}`);
         } else if (data.message) {
-          alert(`ℹ️ ${data.message}`);
+          showInfo(data.message);
         }
       }
     } catch (error) {
       console.error('Extraction failed:', error);
-      alert('Failed to extract receipt. Please try again or enter details manually.');
+      showError('Failed to extract receipt. Please try again or enter details manually.');
     } finally {
       setExtracting(false);
     }

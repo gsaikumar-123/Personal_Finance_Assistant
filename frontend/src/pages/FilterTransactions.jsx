@@ -6,6 +6,7 @@ import { allCategories, transactionTypes } from '../utils/constants';
 import Select from '../components/common/Select';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import ConfirmDialog from '../components/common/ConfirmDialog';
 import CategoryChart from '../components/charts/CategoryChart';
 import DateChart from '../components/charts/DateChart';
 
@@ -16,6 +17,7 @@ const FilterTransactions = () => {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ type: '', category: '', fromDate: '', toDate: '' });
   const [deletingId, setDeletingId] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, id: null });
 
   const hasFilters = Object.values(filters).some(v => v !== '');
   const updateFilter = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
@@ -53,7 +55,11 @@ const FilterTransactions = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this transaction?')) return;
+    setConfirmDelete({ isOpen: true, id });
+  };
+
+  const confirmDeleteTransaction = async () => {
+    const id = confirmDelete.id;
     setDeletingId(id);
     try {
       await transactionAPI.delete(id);
@@ -191,6 +197,17 @@ const FilterTransactions = () => {
           )}
         </div>
       </div>
+      
+      <ConfirmDialog
+        isOpen={confirmDelete.isOpen}
+        onClose={() => setConfirmDelete({ isOpen: false, id: null })}
+        onConfirm={confirmDeleteTransaction}
+        title="Delete Transaction"
+        message="Are you sure you want to delete this transaction? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 };
