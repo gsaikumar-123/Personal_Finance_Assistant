@@ -10,6 +10,7 @@ import Profile from './pages/Profile'
 import AddTransaction from './pages/AddTransaction'
 import EditTransaction from './pages/EditTransaction'
 import FilterTransactions from './pages/FilterTransactions'
+import ReceiptExtractor from './pages/ReceiptExtractor'
 
 function App() {
   return (
@@ -58,6 +59,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <FilterTransactions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receipt-extractor"
+              element={
+                <ProtectedRoute>
+                  <ReceiptExtractor />
                 </ProtectedRoute>
               }
             />
