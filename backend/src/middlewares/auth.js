@@ -11,7 +11,7 @@ const userAuth = async (req,res,next)=>{
             return res.status(401).send("Please Login");
         }
 
-        const decoddedMessage = jwt.verify(token, process.env.JWT_SECRET);
+        const decoddedMessage = jwt.verify(token, process.env.JWT_SECRET || "Sai@2304");
         const {_id} = decoddedMessage;
 
         const user = await User.findById(_id);
@@ -23,7 +23,8 @@ const userAuth = async (req,res,next)=>{
         next();
     } 
     catch (err) {
-        res.send("Error : " + err);
+        console.error("Auth middleware error:", err);
+        res.status(401).json({ message: "Authentication failed" });
     }
 
 }

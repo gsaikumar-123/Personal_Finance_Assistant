@@ -52,18 +52,19 @@ authRouter.post("/login", async (req, res) => {
       expires: new Date(Date.now() + 3600000),
     });
 
-    res.status(200).json(user);
+    res.status(200).json({ message: "Login successful", data: user });
   } catch (err) {
     console.error("Login error:", err);
+    res.status(500).json({ message: "Login failed" });
   }
 });
 
 
-authRouter.post("/logout",async (req,res)=>{
+authRouter.get("/logout",async (req,res)=>{
     res.cookie("token",null,{
         expires : new Date(Date.now()),
     });
-    res.send("Log Out Successfully");
+    res.json({message: "Log Out Successfully"});
 });
 
 
