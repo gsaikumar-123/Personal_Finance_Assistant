@@ -18,6 +18,8 @@ The Personal Finance Assistant is a full-stack web application that helps users 
 
 ---
 
+[Click here to watch the demo](https://youtu.be/CVLi5-oYRP8)
+
 ## How to Run
 
 ### 1. Clone the Repository
