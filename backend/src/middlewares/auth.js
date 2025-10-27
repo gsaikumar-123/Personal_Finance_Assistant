@@ -11,7 +11,10 @@ const userAuth = async (req,res,next)=>{
             return res.status(401).send("Please Login");
         }
 
-        const decoddedMessage = jwt.verify(token, process.env.JWT_SECRET || "Sai@2304");
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET not set in environment');
+        }
+        const decoddedMessage = jwt.verify(token, process.env.JWT_SECRET);
         const {_id} = decoddedMessage;
 
         const user = await User.findById(_id);

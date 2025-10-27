@@ -8,7 +8,19 @@ transactionRouter.get("/transactions", userAuth, async (req, res) => {
     try {
       const filter = { userId: req.user._id };
       const transactions = await Transaction.find(filter).sort({ date: -1 });
-      res.json({ message: "Transactions fetched", data: transactions });
+      // Remove internal fields from each transaction
+      const safeTransactions = transactions.map(t => ({
+        _id: t._id,
+        type: t.type,
+        amount: t.amount,
+        category: t.category,
+        date: t.date,
+        description: t.description,
+        paymentMethod: t.paymentMethod,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt
+      }));
+      res.json({ message: "Transactions fetched", data: safeTransactions });
     } 
     catch (err) {
       res.status(500).json({ message: "Error fetching transactions", error: err.message });
@@ -24,7 +36,20 @@ transactionRouter.post("/transactions/add", userAuth, async (req, res) => {
       });
 
       const savedTransaction = await transaction.save();
-      res.status(201).json({ message: "Transaction added", data: savedTransaction });
+      // Remove internal fields
+      const t = savedTransaction;
+      const safeTransaction = {
+        _id: t._id,
+        type: t.type,
+        amount: t.amount,
+        category: t.category,
+        date: t.date,
+        description: t.description,
+        paymentMethod: t.paymentMethod,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt
+      };
+      res.status(201).json({ message: "Transaction added", data: safeTransaction });
     }
     catch (err) {
       res.status(400).json({ message: "Error adding transaction", error: err.message });
@@ -43,7 +68,18 @@ transactionRouter.get("/transactions/:type", userAuth, async (req, res) => {
         filter.type = type;
       }
       const transactions = await Transaction.find(filter).sort({ date: -1 });
-      res.json({ message: "Transactions fetched", data: transactions });
+      const safeTransactions = transactions.map(t => ({
+        _id: t._id,
+        type: t.type,
+        amount: t.amount,
+        category: t.category,
+        date: t.date,
+        description: t.description,
+        paymentMethod: t.paymentMethod,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt
+      }));
+      res.json({ message: "Transactions fetched", data: safeTransactions });
     } 
     catch (err) {
       res.status(500).json({ message: "Error fetching transactions", error: err.message });
@@ -63,7 +99,21 @@ transactionRouter.put("/transactions/update/:id", userAuth, async (req, res) => 
         return res.status(404).json({ message: "Transaction not found" });
       }
 
-      res.json({ message: "Transaction updated", data: updated });
+      if (updated) {
+        const t = updated;
+        const safeTransaction = {
+          _id: t._id,
+          type: t.type,
+          amount: t.amount,
+          category: t.category,
+          date: t.date,
+          description: t.description,
+          paymentMethod: t.paymentMethod,
+          createdAt: t.createdAt,
+          updatedAt: t.updatedAt
+        };
+        res.json({ message: "Transaction updated", data: safeTransaction });
+      }
     } 
     catch (err) {
       res.status(500).json({ message: "Error updating transaction", error: err.message });
@@ -81,7 +131,21 @@ transactionRouter.delete("/transactions/delete/:id", userAuth, async (req, res) 
         return res.status(404).json({ message: "Transaction not found" });
       }
 
-      res.json({ message: "Transaction deleted", data: deleted });
+      if (deleted) {
+        const t = deleted;
+        const safeTransaction = {
+          _id: t._id,
+          type: t.type,
+          amount: t.amount,
+          category: t.category,
+          date: t.date,
+          description: t.description,
+          paymentMethod: t.paymentMethod,
+          createdAt: t.createdAt,
+          updatedAt: t.updatedAt
+        };
+        res.json({ message: "Transaction deleted", data: safeTransaction });
+      }
     } 
     catch (err) {
       res.status(500).json({ message: "Error deleting transaction", error: err.message });
@@ -104,7 +168,18 @@ transactionRouter.get("/transactions/filter/:fromDate/:toDate", userAuth, async 
         },
       }).sort({ date: -1 });
 
-      res.json({ message: "Transactions fetched", data: transactions });
+      const safeTransactions = transactions.map(t => ({
+        _id: t._id,
+        type: t.type,
+        amount: t.amount,
+        category: t.category,
+        date: t.date,
+        description: t.description,
+        paymentMethod: t.paymentMethod,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt
+      }));
+      res.json({ message: "Transactions fetched", data: safeTransactions });
     } 
     catch (err) {
       res.status(500).json({ message: "Error filtering transactions", error: err.message });
@@ -126,7 +201,18 @@ transactionRouter.get("/transactions/filter/:category", userAuth, async (req, re
         category: category
       }).sort({date: -1});
 
-      res.json({ message: "Transactions fetched", data: transactions });
+      const safeTransactions = transactions.map(t => ({
+        _id: t._id,
+        type: t.type,
+        amount: t.amount,
+        category: t.category,
+        date: t.date,
+        description: t.description,
+        paymentMethod: t.paymentMethod,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt
+      }));
+      res.json({ message: "Transactions fetched", data: safeTransactions });
     }
     catch (err) {
       res.status(500).json({ message: "Error fetching transactions by category", error: err.message });

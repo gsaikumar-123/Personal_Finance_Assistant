@@ -24,7 +24,16 @@ authRouter.post("/signup",async (req,res)=>{
           expires: new Date(Date.now() + 3600000),
         });
         
-        res.json({message : "User created",data : newUser});
+        // Do not expose password or internal fields
+        const safeUser = {
+          _id: newUser._id,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          emailId: newUser.emailId,
+          createdAt: newUser.createdAt,
+          updatedAt: newUser.updatedAt
+        };
+        res.json({message : "User created",data : safeUser});
     }
     catch(err){
         res.send("Error creating account : " + err);
@@ -52,7 +61,16 @@ authRouter.post("/login", async (req, res) => {
       expires: new Date(Date.now() + 3600000),
     });
 
-    res.status(200).json({ message: "Login successful", data: user });
+    // Do not expose password or internal fields
+    const safeUser = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      emailId: user.emailId,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+    res.status(200).json({ message: "Login successful", data: safeUser });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Login failed" });

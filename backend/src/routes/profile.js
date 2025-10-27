@@ -4,8 +4,17 @@ const profileRouter = express.Router();
 
 profileRouter.get("/profile/view", userAuth ,async(req,res)=>{
     try{
-        const user = req.user;
-        res.json({ message: "Profile fetched", data: user });
+                // Do not expose password or internal fields
+                const user = req.user;
+                const safeUser = {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    emailId: user.emailId,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                };
+                res.json({ message: "Profile fetched", data: safeUser });
     }
     catch(err){
         console.error("Profile error:", err);

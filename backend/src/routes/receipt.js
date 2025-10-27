@@ -41,7 +41,7 @@ router.post('/extract-receipt', userAuth, upload.single('receipt'), async (req, 
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    console.log('Uploaded file:', req.file);
+  // Remove file log for privacy
 
     const filePath = req.file.path;
     const mimeType = req.file.mimetype;
@@ -83,11 +83,16 @@ router.post('/extract-receipt', userAuth, upload.single('receipt'), async (req, 
           });
 
           const savedTransaction = await transaction.save();
-          console.log('Transaction saved automatically:', savedTransaction._id);
+          // Do not log ObjectId
           
           fs.unlinkSync(filePath);
+          // Only return non-sensitive transactionId
           return res.json({
-            ...extractedData,
+            amount: extractedData.amount,
+            date: extractedData.date,
+            merchant: extractedData.merchant,
+            category: extractedData.category,
+            items: extractedData.items,
             transactionId: savedTransaction._id,
             message: 'Receipt extracted and transaction saved successfully'
           });
@@ -176,7 +181,7 @@ async function extractWithGemini(base64Image, mimeType = 'image/jpeg') {
   };
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody)
