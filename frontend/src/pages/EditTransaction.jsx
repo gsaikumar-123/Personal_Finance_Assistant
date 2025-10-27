@@ -51,11 +51,11 @@ const EditTransaction = () => {
 
   if (fetching) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="card">
-            <div className="flex justify-center items-center py-8">
-              <div className="text-gray-500">Loading transaction...</div>
+      <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-lg shadow-md p-8 text-center">
+            <div className="flex justify-center items-center py-12">
+              <div className="text-gray-500 text-sm sm:text-base">Loading transaction...</div>
             </div>
           </div>
         </div>
@@ -77,20 +77,22 @@ const EditTransaction = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Edit Transaction</h1>
-          <p className="text-gray-600 mt-2">Update your transaction details</p>
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Edit Transaction</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">Update your transaction details</p>
         </div>
         
-        <TransactionForm
-          initialData={initialData}
-          onSubmit={handleSubmit}
-          onCancel={() => navigate('/dashboard')}
-          submitLabel="Update Transaction"
-          loading={loading}
-        />
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <TransactionForm
+            initialData={initialData}
+            onSubmit={handleSubmit}
+            onCancel={() => navigate('/dashboard')}
+            submitLabel="Update Transaction"
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   );

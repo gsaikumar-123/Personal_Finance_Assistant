@@ -47,14 +47,14 @@ const TransactionForm = ({
   };
 
   return (
-    <div className="card">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
       {errors.general && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
           {errors.general}
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Select
           label="Type"
           name="type"
@@ -120,11 +120,12 @@ const TransactionForm = ({
         />
       </div>
 
-      <div className="flex gap-3 mt-6">
+      <div className="flex flex-col sm:flex-row gap-3 mt-6">
         <Button
           onClick={handleSubmit}
           disabled={loading}
           variant={formData.type === 'income' ? 'success' : 'primary'}
+          className="flex-1"
         >
           {loading ? 'Saving...' : submitLabel}
         </Button>
@@ -134,6 +135,7 @@ const TransactionForm = ({
             onClick={onCancel}
             variant="outline"
             disabled={loading}
+            className="flex-1 sm:flex-none"
           >
             Cancel
           </Button>

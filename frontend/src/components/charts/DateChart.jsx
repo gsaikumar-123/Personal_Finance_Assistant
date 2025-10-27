@@ -16,9 +16,9 @@ const DateChart = ({ transactions }) => {
 
   if (!transactions || transactions.length === 0) {
     return (
-      <div className="card">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses Over Time</h3>
-        <div className="text-center py-8 text-gray-500">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Income vs Expenses (Last 30 Days)</h3>
+        <div className="text-center py-8 sm:py-12 text-gray-500 text-sm sm:text-base">
           No transaction data available
         </div>
       </div>
@@ -80,6 +80,12 @@ const DateChart = ({ transactions }) => {
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          font: {
+            size: window.innerWidth < 640 ? 10 : 12,
+          },
+          padding: window.innerWidth < 640 ? 10 : 15,
+        },
       },
       tooltip: {
         callbacks: {
@@ -96,11 +102,17 @@ const DateChart = ({ transactions }) => {
           callback: function(value) {
             return '₹' + value.toFixed(2);
           },
+          font: {
+            size: window.innerWidth < 640 ? 9 : 10,
+          },
         },
       },
       x: {
         ticks: {
-          maxTicksLimit: 10,
+          maxTicksLimit: window.innerWidth < 640 ? 6 : 10,
+          font: {
+            size: window.innerWidth < 640 ? 9 : 10,
+          },
         },
       },
     },
@@ -111,9 +123,9 @@ const DateChart = ({ transactions }) => {
   };
 
   return (
-    <div className="card">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Income vs Expenses (Last 30 Days)</h3>
-      <div className="h-64">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Income vs Expenses (Last 30 Days)</h3>
+      <div className="h-56 sm:h-64 md:h-80">
         <Line data={data} options={options} />
       </div>
     </div>

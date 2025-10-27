@@ -20,7 +20,7 @@ const Notification = ({ message, type = 'info', duration = 5000, onClose }) => {
 
   if (!isVisible) return null;
 
-  const baseClasses = 'fixed top-4 right-4 z-50 max-w-sm w-full p-4 rounded-lg shadow-lg border-l-4 transform transition-all duration-300 ease-in-out';
+  const baseClasses = 'fixed bottom-4 right-4 sm:top-4 sm:right-4 sm:bottom-auto z-50 max-w-sm w-full mx-4 sm:mx-0 p-4 rounded-lg shadow-lg border-l-4 transform transition-all duration-300 ease-in-out';
   
   const typeClasses = {
     success: 'bg-green-50 border-green-400 text-green-800',

@@ -18,9 +18,9 @@ const CategoryChart = ({ transactions }) => {
   
   if (expenseTransactions.length === 0) {
     return (
-      <div className="card">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
-        <div className="text-center py-8 text-gray-500">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
+        <div className="text-center py-8 sm:py-12 text-gray-500 text-sm sm:text-base">
           No expense data available
         </div>
       </div>
@@ -59,10 +59,10 @@ const CategoryChart = ({ transactions }) => {
       legend: {
         position: 'bottom',
         labels: {
-          padding: 20,
+          padding: window.innerWidth < 640 ? 12 : 20,
           usePointStyle: true,
           font: {
-            size: 12,
+            size: window.innerWidth < 640 ? 10 : 12,
           },
         },
       },
@@ -83,9 +83,9 @@ const CategoryChart = ({ transactions }) => {
   };
 
   return (
-    <div className="card">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
-      <div className="h-64">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
+      <div className="h-56 sm:h-64 md:h-80">
         <Doughnut data={data} options={options} />
       </div>
     </div>

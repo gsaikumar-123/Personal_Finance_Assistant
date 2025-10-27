@@ -80,75 +80,82 @@ const SignupForm = ({ onSuccess }) => {
   };
 
   return (
-    <div className="card max-w-md mx-auto">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Sign Up</h2>
-      
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {errors.general}
+    <div className="w-full max-w-md mx-auto px-4 sm:px-0">
+      <div className="bg-white rounded-lg shadow-md p-6 sm:p-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 text-center">Create Account</h2>
+        <p className="text-sm sm:text-base text-gray-600 text-center mb-6 sm:mb-8">Join us to manage your finances</p>
+        
+        {errors.general && (
+          <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+            <p className="text-sm sm:text-base text-red-700 font-medium">{errors.general}</p>
+          </div>
+        )}
+
+        <div className="space-y-4 sm:space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              placeholder="First name"
+              error={errors.firstName}
+              required
+            />
+
+            <Input
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Last name"
+              error={errors.lastName}
+              required
+            />
+          </div>
+
+          <Input
+            label="Email"
+            type="email"
+            name="emailId"
+            value={formData.emailId}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            error={errors.emailId}
+            required
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter your password"
+            error={errors.password}
+            required
+          />
+
+          <Input
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm your password"
+            error={errors.confirmPassword}
+            required
+          />
+
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full h-12 sm:h-11 text-base sm:text-sm font-semibold mt-6 sm:mt-8"
+          >
+            {loading ? 'Creating account...' : 'Sign Up'}
+          </Button>
         </div>
-      )}
-
-      <Input
-        label="First Name"
-        name="firstName"
-        value={formData.firstName}
-        onChange={handleChange}
-        placeholder="Enter your first name"
-        error={errors.firstName}
-        required
-      />
-
-      <Input
-        label="Last Name"
-        name="lastName"
-        value={formData.lastName}
-        onChange={handleChange}
-        placeholder="Enter your last name"
-        error={errors.lastName}
-        required
-      />
-
-      <Input
-        label="Email"
-        type="email"
-        name="emailId"
-        value={formData.emailId}
-        onChange={handleChange}
-        placeholder="Enter your email"
-        error={errors.emailId}
-        required
-      />
-
-      <Input
-        label="Password"
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Enter your password"
-        error={errors.password}
-        required
-      />
-
-      <Input
-        label="Confirm Password"
-        type="password"
-        name="confirmPassword"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        placeholder="Confirm your password"
-        error={errors.confirmPassword}
-        required
-      />
-
-      <Button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="w-full"
-      >
-        {loading ? 'Creating account...' : 'Sign Up'}
-      </Button>
+      </div>
     </div>
   );
 };
