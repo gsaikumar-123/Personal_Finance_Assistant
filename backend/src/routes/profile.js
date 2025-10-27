@@ -4,7 +4,6 @@ const profileRouter = express.Router();
 
 profileRouter.get("/profile/view", userAuth ,async(req,res)=>{
     try{
-                // Do not expose password or internal fields
                 const user = req.user;
                 const safeUser = {
                     _id: user._id,
@@ -17,7 +16,6 @@ profileRouter.get("/profile/view", userAuth ,async(req,res)=>{
                 res.json({ message: "Profile fetched", data: safeUser });
     }
     catch(err){
-        console.error("Profile error:", err);
         res.status(500).json({ message: "Error fetching profile" });
     }
 });

@@ -24,7 +24,6 @@ authRouter.post("/signup",async (req,res)=>{
           expires: new Date(Date.now() + 3600000),
         });
         
-        // Do not expose password or internal fields
         const safeUser = {
           _id: newUser._id,
           firstName: newUser.firstName,
@@ -61,7 +60,6 @@ authRouter.post("/login", async (req, res) => {
       expires: new Date(Date.now() + 3600000),
     });
 
-    // Do not expose password or internal fields
     const safeUser = {
       _id: user._id,
       firstName: user.firstName,
@@ -72,7 +70,6 @@ authRouter.post("/login", async (req, res) => {
     };
     res.status(200).json({ message: "Login successful", data: safeUser });
   } catch (err) {
-    console.error("Login error:", err);
     res.status(500).json({ message: "Login failed" });
   }
 });

@@ -41,7 +41,6 @@ router.post('/extract-receipt', userAuth, upload.single('receipt'), async (req, 
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-  // Remove file log for privacy
 
     const filePath = req.file.path;
     const mimeType = req.file.mimetype;
@@ -83,10 +82,8 @@ router.post('/extract-receipt', userAuth, upload.single('receipt'), async (req, 
           });
 
           const savedTransaction = await transaction.save();
-          // Do not log ObjectId
           
           fs.unlinkSync(filePath);
-          // Only return non-sensitive transactionId
           return res.json({
             amount: extractedData.amount,
             date: extractedData.date,
@@ -145,7 +142,6 @@ router.post('/extract-receipt', userAuth, upload.single('receipt'), async (req, 
 
 async function extractWithGemini(base64Image, mimeType = 'image/jpeg') {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  console.log('GEMINI_API_KEY loaded:', !!GEMINI_API_KEY);
   if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_gemini_api_key_here') {
     throw new Error('Gemini API key not configured. Please add your Gemini API key to the .env file.');
   }
@@ -193,14 +189,12 @@ async function extractWithGemini(base64Image, mimeType = 'image/jpeg') {
     }
 
     const data = await response.json();
-    console.log('Gemini API response:', JSON.stringify(data, null, 2));
 
     if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0].text) {
       throw new Error('Invalid response structure from Gemini API');
     }
 
     const extractedText = data.candidates[0].content.parts[0].text;
-    console.log('Extracted text:', extractedText);
 
     const jsonMatch = extractedText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
@@ -211,7 +205,6 @@ async function extractWithGemini(base64Image, mimeType = 'image/jpeg') {
     try {
       parsedData = JSON.parse(jsonMatch[0]);
     } catch (parseError) {
-      console.error('JSON parsing error:', parseError, 'Raw text:', extractedText);
       throw new Error('Failed to parse JSON from Gemini API response');
     }
 
@@ -223,7 +216,6 @@ async function extractWithGemini(base64Image, mimeType = 'image/jpeg') {
       items: Array.isArray(parsedData.items) ? parsedData.items : []
     };
   } catch (error) {
-    console.error('Gemini API processing error:', error);
     throw error;
   }
 }

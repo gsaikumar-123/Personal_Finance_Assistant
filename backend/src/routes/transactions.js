@@ -8,7 +8,6 @@ transactionRouter.get("/transactions", userAuth, async (req, res) => {
     try {
       const filter = { userId: req.user._id };
       const transactions = await Transaction.find(filter).sort({ date: -1 });
-      // Remove internal fields from each transaction
       const safeTransactions = transactions.map(t => ({
         _id: t._id,
         type: t.type,
@@ -36,7 +35,6 @@ transactionRouter.post("/transactions/add", userAuth, async (req, res) => {
       });
 
       const savedTransaction = await transaction.save();
-      // Remove internal fields
       const t = savedTransaction;
       const safeTransaction = {
         _id: t._id,

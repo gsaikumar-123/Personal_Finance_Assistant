@@ -19,12 +19,8 @@ app.use("/api", receiptRouter);
 
 connectDb()
   .then(() => {
-    console.log("Database Connected");
-
     app.listen(process.env.PORT || 1234, () => {
-      console.log("Server started on port 1234...");
     });
   })
   .catch((err) => {
-    console.log("Database Connection Error:", err.message);
   });
