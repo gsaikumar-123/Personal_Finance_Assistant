@@ -18,6 +18,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
+      'https://personal-finance-assistant.vercel.app'
     ],
     credentials: true,
   })
