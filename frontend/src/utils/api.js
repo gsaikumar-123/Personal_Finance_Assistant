@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const baseURL = "https://localhost:1234/api";
+const baseURL = 'http://localhost:1234';
 
 const api = axios.create({
   baseURL,
@@ -28,8 +27,9 @@ export const transactionAPI = {
   getByType: (type) => api.get(`/transactions/${type}`),
   update: (id, transaction) => api.put(`/transactions/update/${id}`, transaction),
   delete: (id) => api.delete(`/transactions/delete/${id}`),
-  filterByDate: (fromDate, toDate) => api.get(`/transactions/filter/${fromDate}/${toDate}`),
+  filterByDate: (fromDate, toDate) =>
+    api.get(`/transactions/filter/${fromDate}/${toDate}`),
   filterByCategory: (category) => api.get(`/transactions/filter/${category}`),
 };
 
-export default api; 
+export default api;

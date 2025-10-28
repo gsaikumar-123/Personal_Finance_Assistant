@@ -8,7 +8,6 @@ const CategoryChart = ({ transactions }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    // Clean up previous chart instance
     if (chartRef.current) {
       chartRef.current.destroy();
     }
