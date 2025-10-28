@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'https://personal-finance-assistant-fm0e.onrender.com/api';
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const api = axios.create({
   baseURL,

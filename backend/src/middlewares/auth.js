@@ -8,7 +8,7 @@ const userAuth = async (req,res,next)=>{
         const {token} = cookies;
 
         if(!token){
-            return res.status(401).send("Please Login");
+            return res.status(401).json({ message: "Please Login" });
         }
 
         if (!process.env.JWT_SECRET) {
@@ -26,8 +26,8 @@ const userAuth = async (req,res,next)=>{
         next();
     } 
     catch (err) {
-        console.error("Auth middleware error:", err);
-        res.status(401).json({ message: "Authentication failed" });
+    console.error("Auth middleware error:", err);
+    res.status(401).json({ message: "Authentication failed" });
     }
 
 }

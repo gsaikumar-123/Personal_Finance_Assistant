@@ -5,6 +5,7 @@ require('dotenv').config();
 const connectDb = require('./config/database');
 
 const app = express();
+app.set('trust proxy', 1);
 
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
@@ -14,12 +15,23 @@ const receiptRouter = require('./routes/receipt');
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedFromEnv = (process.env.FRONTEND_ORIGIN || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+const allowedOrigins = new Set([
+  'http://localhost:5173',
+  'https://personal-finance-assistant.vercel.app',
+  ...allowedFromEnv,
+]);
+
 app.use(
   cors({
-    origin: [
-      'http://localhost:5173',
-      'https://personal-finance-assistant.vercel.app'
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.has(origin)) return callback(null, true);
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   })
 );
