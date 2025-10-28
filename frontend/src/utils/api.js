@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'http://localhost:1234';
+const baseURL = 'https://personal-finance-assistant-fm0e.onrender.com/api';
 
 const api = axios.create({
   baseURL,
